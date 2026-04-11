@@ -1,0 +1,37 @@
+﻿const byte pin = 3; // Timer 'B' output
+const long frequency = 40000L; // 40kHz signal 
+const byte pin2 = 10;
+const long timer1_OCR1A_Setting = F_CPU / 40000L;
+
+int output1 = 5; // upper array
+int output2 = 6; // lower array
+
+void setup() {
+    // put your setup code here, to run once:
+pinMode(pin,OUTPUT); 
+pinMode(pin2,OUTPUT); 
+pinMode(output1,OUTPUT);
+pinMode(output2,OUTPUT);
+
+TCCR2A = bit (WGM20) | bit (WGM21) | bit (COM2B1);
+TCCR2B = bit (WGM22) | bit (CS21);
+OCR2A = ((F_CPU/8)/ frequency)-1; // Pre-scaler value of 8
+OCR2B = ((OCR2A + 1) /2) -1; // Divide by 2. 50% duty cycle.
+
+TCCR1A = bit (WGM10) | bit (WGM11) | bit (COM1B1); // fast PWM, clear OC1B on compare
+TCCR1B = bit (WGM12) | bit (WGM13) | bit (CS10);      // fast PWM, no prescaler
+OCR1A = (timer1_OCR1A_Setting)-1; // Pre-scaler value of 8
+OCR1B = ((OCR1A + 1) /2) -1; // Divide by 2. 50% duty cycle.
+
+digitalWrite(output1,HIGH);
+digitalWrite(output2,HIGH);
+
+}
+
+void loop() {
+    // put your main code here, to run repeatedly:
+
+
+
+}
+
